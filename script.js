@@ -2,7 +2,7 @@ let qrCode;
 let logoEnabled = true;
 let currentLogoSize = 0.3;
 let uploadedImageURL = null;
-const defaultLogoURL = "logometro.png"; // Replace with your own logo if needed
+const defaultLogoURL = "logometro.PNG"; // Replace with your own logo if needed
 
 
 function generateQRCode() {
