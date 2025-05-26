@@ -2,6 +2,11 @@ let qrCode;
 let logoEnabled = true;
 let currentLogoSize = 0.3;
 let uploadedImageURL = null;
+
+// Load initial count from localStorage or set to 0
+let downloadCount = parseInt(localStorage.getItem("downloadCount")) || 0;
+document.getElementById("downloadCount").innerText = downloadCount;
+
 const defaultLogoURL = "logometro.PNG"; // Replace with your own logo if needed
 
 
@@ -64,11 +69,33 @@ function updateLogoSize() {
 
 function downloadQRCode() {
   if (qrCode) {
-    // Download the QR Code as an image
+    // 1. Download the QR Code as an image
     qrCode.download({
       name: "qr-code", // Name of the file to be downloaded
       extension: "png", // Image format (png, jpeg, etc.)
     });
+
+    // 2. Save URL to list
+    const text = document.getElementById("qrText").value.trim();
+    if (text && !savedURLs.includes(text)) {
+      savedURLs.push(text);
+    }
+
+    // 3. Download the URL list as a .txt file
+    if (savedURLs.length > 0) {
+      const blob = new Blob([savedURLs.join('\n')], { type: "text/plain" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "saved-urls.txt";
+      link.click();
+    }
+    
+    // 4. ✅ Update localStorage and UI
+    downloadCount++;
+    localStorage.setItem("downloadCount", downloadCount);
+    document.getElementById("downloadCount").innerText = downloadCount;
+
+
   }
 }
 
